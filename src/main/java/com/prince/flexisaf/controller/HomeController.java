@@ -18,7 +18,7 @@ public class HomeController {
         response.put("application", "FlexiSAF API");
         response.put("status", "running");
         response.put("message", "Spring Boot application is up");
-        response.put("version", "1.0.0");
+        response.put("version", "1.0");
         return ResponseEntity.ok(response);
     }
 }
