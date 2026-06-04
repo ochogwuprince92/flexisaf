@@ -120,6 +120,16 @@ Customer order delivery lifecycle
         int estimated_time_min
     }
 
+## Available Endpoints
+
+| Method | Endpoint                                      | Description             |
+| ------ | --------------------------------------------- | ----------------------- |
+| POST   | `/api/shipments`                              | Create a new shipment   |
+| GET    | `/api/shipments`                              | Retrieve all shipments  |
+| GET    | `/api/shipments/{id}`                         | Retrieve shipment by ID |
+| PATCH  | `/api/shipments/{id}/status?status=DELIVERED` | Update shipment status  |
+| DELETE | `/api/shipments/{id}`                         | Delete shipment         |
+
 
 ## Author
 
