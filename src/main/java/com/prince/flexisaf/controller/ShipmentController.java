@@ -1,6 +1,7 @@
 package com.prince.flexisaf.controller;
 
 import com.prince.flexisaf.entity.Shipment;
+import com.prince.flexisaf.enums.ShipmentStatus;
 import com.prince.flexisaf.service.ShipmentService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -38,16 +39,14 @@ public class ShipmentController {
     // Update shipment status
     @PatchMapping("/{id}/status")
     public Shipment updateStatus(@PathVariable Long id,
-                                 @RequestParam String status) {
+                                 @RequestParam ShipmentStatus status) {
         return shipmentService.updateShipmentStatus(id, status);
-    }
+    }                                                          // ← was missing
 
     // Delete shipment
-
-    @DeleteMapping("/id")
-    public String deleteShipment(@PathVariable Long id){
+    @DeleteMapping("/{id}")                                    // ← was "/id"
+    public String deleteShipment(@PathVariable Long id) {
         shipmentService.deleteShipment(id);
-
-        return "shipment deleted successfully";
+        return "Shipment deleted successfully";
     }
 }
