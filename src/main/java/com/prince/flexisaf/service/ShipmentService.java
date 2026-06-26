@@ -11,12 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+//Constructor injection through lombok
 @RequiredArgsConstructor
 public class ShipmentService {
 
+    // Final- immutable (generates constructor)
     private final ShipmentRepository shipmentRepository;
 
     // Create shipment
+    @Transactional
     public Shipment createShipment(Shipment shipment) {
         return shipmentRepository.save(shipment);
     }
