@@ -1,5 +1,7 @@
 package com.prince.flexisaf.service;
 
+import com.prince.flexisaf.dto.ShipmentRequest;
+import com.prince.flexisaf.dto.ShipmentResponse;
 import com.prince.flexisaf.entity.Shipment;
 import com.prince.flexisaf.enums.ShipmentStatus;
 import com.prince.flexisaf.exception.ResourceNotFoundException;
@@ -11,44 +13,73 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-//Constructor injection through lombok
 @RequiredArgsConstructor
 public class ShipmentService {
 
-    // Final- immutable (generates constructor)
     private final ShipmentRepository shipmentRepository;
 
-    // Create shipment
     @Transactional
-    public Shipment createShipment(Shipment shipment) {
-        return shipmentRepository.save(shipment);
+    public ShipmentResponse createShipment(ShipmentRequest request) {
+        Shipment shipment = Shipment.builder()
+                .trackingNumber(request.getTrackingNumber())
+                .origin(request.getOrigin())
+                .destination(request.getDestination())
+                .status(ShipmentStatus.PENDING)
+                .weightKg(request.getWeightKg())
+                .declaredValue(request.getDeclaredValue())
+                .deliveryNotes(request.getDeliveryNotes())
+                .requiresSignature(request.getRequiresSignature())
+                .build();
+
+        return toResponse(shipmentRepository.save(shipment));
     }
 
-    // List all shipments
     @Transactional(readOnly = true)
-    public List<Shipment> getAllShipments() {
-        return shipmentRepository.findAll();
+    public List<ShipmentResponse> getAllShipments() {
+        return shipmentRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    // Get shipment by ID
     @Transactional(readOnly = true)
-    public Shipment getShipmentById(Long id) {
-        return shipmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found with id: " + id));
+    public ShipmentResponse getShipmentById(Long id) {
+        return toResponse(findOrThrow(id));
     }
 
-    // Update shipment status
-    public Shipment updateShipmentStatus(Long id, ShipmentStatus status) {
-        Shipment shipment = shipmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found with id: " + id));
+    @Transactional
+    public ShipmentResponse updateShipmentStatus(Long id, ShipmentStatus status) {
+        Shipment shipment = findOrThrow(id);
         shipment.setStatus(status);
-        return shipmentRepository.save(shipment);
+        return toResponse(shipmentRepository.save(shipment));
     }
 
-    // Delete shipment
+    @Transactional
     public void deleteShipment(Long id) {
-        Shipment shipment = shipmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found with id: " + id));
-        shipmentRepository.delete(shipment);
+        shipmentRepository.delete(findOrThrow(id));
+    }
+
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    private Shipment findOrThrow(Long id) {
+        return shipmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Shipment not found with id: " + id));
+    }
+
+    private ShipmentResponse toResponse(Shipment s) {
+        return ShipmentResponse.builder()
+                .shipmentId(s.getShipmentId())
+                .trackingNumber(s.getTrackingNumber())
+                .origin(s.getOrigin())
+                .destination(s.getDestination())
+                .status(s.getStatus())
+                .weightKg(s.getWeightKg())
+                .declaredValue(s.getDeclaredValue())
+                .deliveryNotes(s.getDeliveryNotes())
+                .requiresSignature(s.getRequiresSignature())
+                .createdAt(s.getCreatedAt())
+                .updatedAt(s.getUpdatedAt())
+                .build();
     }
 }
