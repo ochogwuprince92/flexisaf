@@ -44,9 +44,12 @@ public class ShipmentController {
 
     @GetMapping
     @Operation(summary = "Get all shipments")
-    @ApiResponse(responseCode = "200", description = "List of shipments")
-    public ResponseEntity<List<ShipmentResponse>> getAllShipments() {
-        return ResponseEntity.ok(shipmentService.getAllShipments());
+    @ApiResponse(responseCode = "200", description = "List returned")
+    public ResponseEntity<List<ShipmentResponse>> getAllShipments(
+            @RequestParam(required = false) ShipmentStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(shipmentService.getAllShipments(status, page, size));
     }
 
     // ── Read one ─────────────────────────────────────────────────────────────
