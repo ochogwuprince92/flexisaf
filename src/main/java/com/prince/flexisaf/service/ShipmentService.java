@@ -7,6 +7,9 @@ import com.prince.flexisaf.enums.ShipmentStatus;
 import com.prince.flexisaf.exception.ResourceNotFoundException;
 import com.prince.flexisaf.repository.ShipmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +38,17 @@ public class ShipmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShipmentResponse> getAllShipments() {
-        return shipmentRepository.findAll()
-                .stream()
+    public List<ShipmentResponse> getAllShipments(ShipmentStatus status, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Shipment> shipments;
+        
+        if (status != null) {
+            shipments = shipmentRepository.findByStatus(status, pageable);
+        } else {
+            shipments = shipmentRepository.findAll(pageable);
+        }
+        
+        return shipments.stream()
                 .map(this::toResponse)
                 .toList();
     }
