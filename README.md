@@ -131,7 +131,115 @@ Customer order delivery lifecycle
 | DELETE | `/api/shipments/{id}`                         | Delete shipment         |
 
 
-## Author
+# Version Control Task
 
+## Project Overview
+
+This repository demonstrates the use of Git and GitHub for version control and collaborative development practices. It showcases branching strategies, pull requests, commit history, branch management, reverting commits, and repository documentation.
+
+---
+
+## Feature Branches
+
+### feature/security-and-auth
+**Purpose**
+Implemented the authentication and authorization module.
+
+**Major Changes**
+- Added AuthRequest DTO
+- Added AuthResponse DTO
+- Implemented AuthService
+- Configured Spring Security
+- Added AuthController
+- Configured authentication endpoints
+
+### feature/test-suite
+**Purpose**
+Added automated testing for the application.
+
+**Major Changes**
+- Added base testing configuration
+- Added TestDataFactory
+- Added ShipmentServiceTest
+- Added UserServiceTest
+- Added UserControllerTest
+- Added UserIntegrationTest
+
+---
+
+## Pull Requests
+
+| Branch | Purpose | Status |
+|---------|----------|--------|
+| feature/security-and-auth | Authentication implementation | Merged |
+| feature/test-suite | Test suite implementation | Merged |
+
+Screenshots of both merged pull requests are included below.
+![auth-pr-merged.png](backend-version-control-task/screenshots/auth-pr-merged.png)
+![test-suite-pr-merged.png](backend-version-control-task/screenshots/test-suite-pr-merged.png)
+
+---
+
+## Git Commands Frequently Used
+
+```bash
+git init
+git status
+git add .
+git commit -m ""
+git branch
+git checkout
+git checkout -b
+git push origin
+git pull origin
+git fetch origin
+git merge
+git stash
+git stash pop
+git revert
+git branch -m
+git remote -v
+```
+
+---
+
+## Revert Demonstration
+
+An intentional change was made to the main branch and reverted using:
+
+```bash
+git revert HEAD
+```
+
+This preserved the commit history while safely undoing the unwanted change.
+
+---
+
+## Branch Rename
+
+The testing branch was renamed using:
+
+```bash
+git branch -m feature/testing feature/test-suite
+git push origin feature/test-suite
+git push origin --delete feature/testing
+git fetch origin
+```
+
+---
+
+## Lessons Learned
+
+- Importance of working on feature branches instead of directly on main.
+- Writing meaningful commit messages improves project history.
+- Pull requests make collaboration and code reviews easier.
+- Git revert is safer than rewriting history when undoing mistakes.
+- Fetching keeps local references synchronized with remote repositories.
+- Renaming branches requires updating both local and remote repositories.
+- Small, focused commits make reviewing code significantly easier.
+
+---
+
+## Author
 **Ochogwu Prince**
 GitHub: [@ochogwuprince92](https://github.com/ochogwuprince92)
